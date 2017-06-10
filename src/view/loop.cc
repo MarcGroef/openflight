@@ -79,13 +79,13 @@ void View::loop()
         
         glUseProgram(d_activeShader->id());
         
-        d_view = conv_to<fmat>::from(arma::eye(1,4));  //eye is armadillo for Identity
-        d_projection = conv_to<fmat>::from(arma::eye(1,4));
+        d_view = mat4();
+        d_projection = mat4();
         
-        fmat camera = {200,200,500};
-        fmat up = {0,1,0};
+        //vec3 camera = {200,200,500};
+        //vec3 up = {0,1,0};
         
-        fmat eyeRot = conv_to<fmat>::from(arma::eye(4,4));
+        //fmat eyeRot = 
         
         render();
         

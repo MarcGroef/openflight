@@ -1,7 +1,6 @@
 #ifndef INCLUDED_VIEW_H_
 #define INCLUDED_VIEW_H_
 
-#include <armadillo>
 
 #include <iostream>
 #include <string>
@@ -13,6 +12,8 @@
 #include <GL/gl.h>
 //#include <GL/glu.h>
 #include <GL/glext.h>
+
+#include <glm/glm.hpp>
 
 #include "../shader_program/shader_program.h"
 
@@ -26,12 +27,12 @@ class View
     ShaderProgram* d_activeShader;
     World d_world;
     
-    arma::fmat d_model;
-    arma::fmat d_view;
-    arma::fmat d_projection;
+    glm::mat4 d_model;
+    glm::mat4 d_view;
+    glm::mat4 d_projection;
     
-    arma::fmat d_eye;
-    arma::fmat d_up;
+    glm::vec4 d_eye;
+    glm::vec3 d_up;
     
     
 public:

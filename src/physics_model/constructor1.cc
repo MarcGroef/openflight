@@ -1,16 +1,15 @@
 #include "physics_model.ih"
 
-PhysicsModel::PhysicsModel(double mass, mat const &position, mat const &velocity, mat const &angInertia)
+PhysicsModel::PhysicsModel(float mass, vec3 const &position, vec3 const &velocity, vec3 const &angInertia)
 :
     d_mass(mass),
     d_position(position),
     d_velocity(velocity),
     d_angularInertia(angInertia)
 {
-    mat zeros(1,3);
-    zeros.fill(0.);
-    d_angularVelocity = zeros;
-    d_summedForce = zeros;
-    d_summedTorque = zeros;
-    d_rollPitchYaw = zeros;
+
+    d_angularVelocity = glm::vec3(0,0,0);
+    d_summedForce = glm::vec3(0,0,0);
+    d_summedTorque = glm::vec3(0,0,0);
+    d_rollPitchYaw = glm::vec3(0,0,0);
 }

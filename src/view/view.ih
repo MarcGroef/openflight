@@ -3,4 +3,4 @@
 #include <sstream>
 
 using namespace std;
-using namespace arma;
+using namespace glm;
