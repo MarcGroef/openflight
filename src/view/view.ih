@@ -1,0 +1,6 @@
+#include "view.h"
+
+#include <sstream>
+
+using namespace std;
+using namespace arma;
