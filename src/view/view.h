@@ -27,21 +27,21 @@ class View
     ShaderProgram* d_activeShader;
     World d_world;
     
-    glm::mat4 d_model;
-    glm::mat4 d_view;
-    glm::mat4 d_projection;
+
     
     glm::vec4 d_eye;
     glm::vec3 d_up;
     
+    float d_xRotation;
+    float d_yRotation;
+    
+    glm::mat4 d_view;
     
 public:
     View(size_t width, size_t height, World& world);
     void initFramebuffer();
     void loop();
-    void render();
     void compile();
-    void loadObjects();
     void linkShaders();
     void addShaders(ShaderProgram const &shader);
     void setActiveShaderProgram(size_t idx);
@@ -50,27 +50,6 @@ private:
     void setProjection();
 };
 
-inline void View::loadObjects()
-{
-    for (WorldObject &obj : d_world.getObjects())
-    {
-        obj.load();
-    }
-}
+#include "view.implh"
 
-
-inline void View::setActiveShaderProgram(size_t idx)
-{
-    d_activeShader = &d_shaders[idx];
-}
-
-inline void View::linkShaders()
-{
-    for (ShaderProgram &sp : d_shaders)
-        sp.link();
-}
-inline void View::addShaders(ShaderProgram const &shaders)
-{
-    d_shaders.push_back(shaders);
-}
 #endif

@@ -26,7 +26,7 @@ void View::loop()
     windowRect.width = d_winWidth;
     windowRect.height = d_winHeight;
 
-    ccWindowCreate(windowRect, "A ccore window", CC_WINDOW_FLAG_NORESIZE);
+    ccWindowCreate(windowRect, "Openflight dev", CC_WINDOW_FLAG_NORESIZE);
     ccGLContextBind();
     ccWindowSetCentered();
     
@@ -45,9 +45,19 @@ void View::loop()
     
     compile();
     linkShaders();
-    loadObjects();
+    d_world.load();
 
     glViewport(0,0,d_winWidth, d_winHeight);
+    
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glEnable(GL_DEPTH_TEST);
+   // glDepthFunc(GL_LESS);
+    
+    glEnable(GL_CULL_FACE),
+    glCullFace(GL_BACK);
+   
+
+    
     for(size_t idx = 0; d_loop; ++idx) {
         //cout << idx << '\n';
         
@@ -67,6 +77,18 @@ void View::loop()
                             ccWindowSetWindowed(&windowRect);
                             ccWindowSetCentered();
                             break;
+                        case CC_KEY_UP:
+                            d_yRotation -= 1;
+                            break;
+                        case CC_KEY_DOWN:
+                            d_yRotation += 1;
+                            break;
+                        case CC_KEY_LEFT:
+                            d_xRotation -= 1;
+                            break;
+                        case CC_KEY_RIGHT:
+                            d_xRotation += 1;
+                            break;
                     }
 
                     break;
@@ -79,15 +101,10 @@ void View::loop()
         
         glUseProgram(d_activeShader->id());
         
-        d_view = mat4();
-        d_projection = mat4();
-        
-        //vec3 camera = {200,200,500};
-        //vec3 up = {0,1,0};
-        
-        //fmat eyeRot = 
-        
-        render();
+        setProjection();
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+        d_world.render(d_activeShader->id(), d_view);
         
         
 

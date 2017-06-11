@@ -24,6 +24,7 @@ void Shader::loadFromFile(string const &file)
         return;
     }
     
+    
     stringstream strstr;
     while(filestr.good())
     {

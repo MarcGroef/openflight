@@ -3,16 +3,46 @@
 
 #include <vector>
 #include "../world_object/world_object.h"
+#include <glm/glm.hpp>
 
 class World
 {
     std::vector<WorldObject> d_objects;
+    glm::vec3 d_lightpos;
 public:
+    World();
     std::vector<WorldObject>& getObjects();
-    void addObject(WorldObject const &object);
+    void addObject(WorldObject &&object);
+    void load();
+    void render(GLuint shaderId, glm::mat4 const &view);
 };
 
-inline void World::addObject(WorldObject const &object)
+inline World::World()
+:
+    d_lightpos(glm::vec3(0,100,0))
+{
+}
+
+
+inline void World::render(GLuint shaderId, glm::mat4 const &view)
+{
+    for (WorldObject &obj : d_objects)
+    {
+       // obj.applyForce({0, -28,0});
+        obj.applyTorque({0,0,0.2});
+        obj.update(0.01f);
+        obj.draw(shaderId, view, d_lightpos);
+    }
+}
+
+
+inline void World::load()
+{
+    for (WorldObject &obj : d_objects)
+        obj.load();
+}
+
+inline void World::addObject(WorldObject &&object)
 {
     d_objects.push_back(object);
 }

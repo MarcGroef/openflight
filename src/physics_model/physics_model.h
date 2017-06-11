@@ -5,6 +5,7 @@
 #include <ostream>
 class PhysicsModel
 {
+protected:
     float d_mass;
     glm::vec3 d_position;
     glm::vec3 d_velocity;

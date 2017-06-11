@@ -16,7 +16,7 @@ void main()
 
     vec3 lightDir = normalize(lightPos - gl_FragCoord.xyz);
     vec3 reflection = lightDir - 2 * dot(lightDir, normalizedNormal) * normalizedNormal;
-    vec3 eye = vec3(0, 0, -1);
+    vec3 eye = vec3(0, -1, );
 
     float dotNormal = dot(lightDir, normalizedNormal);
     float dotReflection = dot(reflection, eye);
