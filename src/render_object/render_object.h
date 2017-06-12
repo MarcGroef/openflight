@@ -14,6 +14,7 @@
 
 #include "../physics_model/physics_model.h"
 #include "../obj_parser/obj_parser.h"
+#include "../texture/texture.h"
 
 class RenderObject : public PhysicsModel
 {
@@ -21,6 +22,8 @@ class RenderObject : public PhysicsModel
     std::vector<GLuint> d_vertIdc;
     std::vector<GLuint> d_normIdc;
     std::vector<GLfloat> d_normals;
+    
+    Texture d_texture;
     
     GLuint d_vboId;
     
@@ -31,17 +34,49 @@ class RenderObject : public PhysicsModel
     GLuint d_vnElId;
     
     bool d_loaded;
+    bool d_hasUV;
+    bool d_hasTexture;
+    float d_scale;
     
 public:
     RenderObject();
-    RenderObject(glm::vec3 const &position);
+    RenderObject(glm::vec3 const &position, float scale);
     ~RenderObject();
     void loadTriangle();//debug
     void loadObject(ObjParser &&objParser);
     void loadObject(std::string const &objParser);
+    void loadTexture(std::string const &texturFile);
     void load();
     void draw(GLuint shaderProgramId, glm::mat4 const &view, glm::vec3 const &lightpos);
 };
+
+
+inline RenderObject::RenderObject()
+:
+    PhysicsModel(1.0, {0.,0,100}, {0,0,0}, {1,1,1}),
+    d_loaded(false),
+    d_hasUV(false),
+    d_hasTexture(false),
+    d_scale(1)
+{
+}
+
+inline RenderObject::RenderObject(glm::vec3 const &position, float scale)
+:
+    PhysicsModel(1.0,position, {0,0,0}, {1,1,1}),
+    d_loaded(false),
+    d_hasUV(false),
+    d_hasTexture(false),
+    d_scale(scale)
+{
+}
+
+inline void RenderObject::loadTexture(std::string const &textureFile)
+{
+    d_texture = Texture(textureFile);
+    d_texture.load();
+    d_hasTexture = true;
+}
 
 inline void RenderObject::loadObject(std::string const &objfile)
 {
@@ -52,27 +87,13 @@ inline void RenderObject::loadObject(std::string const &objfile)
 inline void RenderObject::loadObject(ObjParser &&objParser)
 {
     d_vertices = (objParser.d_vertices);
+    d_hasUV = objParser.d_uv.size() != 0;
     //d_normals = (objParser.d_normals);
     //d_vertIdc = (objParser.d_vertIdc);
     //d_normIdc = objParser.d_normIdc;
     d_loaded = true;
     //std::cout << d_vertices.size() << " vertices, " << d_normals.size() << " normals, " << d_vertIdc.size() << " idc " << d_normIdc.size() << " normIdc\n";
 }
-
-inline RenderObject::RenderObject()
-:
-    PhysicsModel(1.0, {0.,0,100}, {0,0,0}, {1,1,1}),
-    d_loaded(false)
-{
-}
-
-inline RenderObject::RenderObject(glm::vec3 const &position)
-:
-    PhysicsModel(1.0,position, {0,0,0}, {1,1,1}),
-    d_loaded(false)
-{
-}
-
 inline RenderObject::~RenderObject()
 {
     if(d_loaded)

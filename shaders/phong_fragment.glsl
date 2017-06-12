@@ -27,5 +27,5 @@ void main()
         if(dotReflection > 0) light += pow(dotReflection, matProps.w) * matProps.z;
     }
 
-    fColor = texture2D(texture, uv) * light;
+    fColor = texture2D(texture, uv);// * light;
 }

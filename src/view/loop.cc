@@ -42,14 +42,16 @@ void View::loop()
         exit(1); // or handle the error in a nicer way
     }
     
-    
+    glEnable(GL_TEXTURE_2D);
+
     compile();
     linkShaders();
-    d_world.load();
-
+    
+    initFramebuffer();
+    
     glViewport(0,0,d_winWidth, d_winHeight);
     
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     //glEnable(GL_DEPTH_TEST);
    // glDepthFunc(GL_LESS);
     
@@ -57,11 +59,8 @@ void View::loop()
     glCullFace(GL_BACK);
    
 
-    
+    d_world.load();
     for(size_t idx = 0; d_loop; ++idx) {
-        //cout << idx << '\n';
-        
-        
         
         while(ccWindowEventPoll()) {
             switch(ccWindowEventGet().type) {
@@ -95,19 +94,19 @@ void View::loop()
                 default:
                     break;
             }
-        }
+        }   
+        
+
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         
         glUseProgram(d_activeShader->id());
-        
         setProjection();
+        //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, d_frameBuffer);
+
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
+        
         d_world.render(d_activeShader->id(), d_view);
-        
-        
-
 
         ccGLBuffersSwap();
     }

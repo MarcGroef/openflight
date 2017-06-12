@@ -1,8 +1,10 @@
-#version 330
+#version 330 core
 in vec3 normal;
 
 uniform mat3 normalMat;
 uniform vec3 lightPos;
+uniform sampler2D text;
+in vec2 uv;
 
 out vec4 color;
 void main()
@@ -17,7 +19,7 @@ void main()
     float dotNormal = dot(lightDir, norm);
     float dotReflection = dot(reflection, eye);
     
-    vec4 light = vec4(0.3,.7,.7, 1.0);//vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    vec4 light = vec4(1,1,1, 1.0);//vec4(1.0f, 0.0f, 0.0f, 1.0f);
     
     if(dotNormal > 0) 
     {
@@ -28,7 +30,8 @@ void main()
     
     //color = vec4(norm,1) * light;
     color = vec4(0.2,0.3,0.2,1) * light;
-    //color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    //color = vec4(normal.x, normal.y, normal.z, 1);
-    //color = vec4(norm.x, norm.y, norm.z, 1);
+    //vec2 uv2 = vec2(1, 1);
+    //color = texture2D(text, uv);// * light;
+    color = texture2D(text, vec2(0.5,0.5)) * light;;
+    color = vec4(uv, 1, 1);
 }

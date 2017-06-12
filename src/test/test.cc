@@ -23,10 +23,10 @@ int main(int argc, char** argv)
 
     World world;
     
-    world.addObject(WorldObject({-40,40,200}));
-    world.addObject(WorldObject({-40,-40,200}));
-    world.addObject(WorldObject({40,40,200}));
-    world.addObject(WorldObject({40,-40,200}));
+    world.addObject(WorldObject({-40,40,200}, "objects/cube.obj", 10, "textures/stone.png"));
+    world.addObject(WorldObject({-40,-40,200}, "objects/sphere.obj", 0.2, "textures/moon.png"));
+    world.addObject(WorldObject({40,40,200}, "objects/sphere.obj", 0.2, "textures/moon.png"));
+    world.addObject(WorldObject({40,-40,200}, "objects/sphere.obj", 0.2, "textures/moon.png"));
     
     ShaderProgram shaders("shaders/simple_fragment.glsl","shaders/phong_vertex.glsl");
     //ShaderProgram shaders("shaders/simple_fragment.glsl","shaders/simple_vertex.glsl");

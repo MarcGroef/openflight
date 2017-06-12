@@ -45,7 +45,7 @@ inline void ObjParser::rollout()
         for(size_t idx = 0; idx != 3; ++idx)
             finalBuffer.push_back(d_normals[(d_normIdc[vIdx] - 1) * 3 + idx]);
         for(size_t idx = 0; idx != 2; ++idx)
-            finalBuffer.push_back(d_uv[(d_textIdc[vIdx] - 1) * 3 + idx]);
+            finalBuffer.push_back(d_uv[(d_textIdc[vIdx] - 1) * 2 + idx]);
         
     }
     d_vertices = finalBuffer;
@@ -99,7 +99,7 @@ inline void ObjParser::parseUV(std::string const &line)
     str >> a;
     float b;
     str >> b;
-    //std::cout << '[' << a << ", " << b << ", " << c << "]\n";
+    std::cout << '[' << a << ", " << b << "]\n";
     d_uv.push_back(a);
     d_uv.push_back(b);
     

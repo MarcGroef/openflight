@@ -37,6 +37,10 @@ class View
     
     glm::mat4 d_view;
     
+    GLuint d_frameBuffer;
+    GLuint d_frameBufferTexture;
+    GLuint d_frameBufferDepth;
+    
 public:
     View(size_t width, size_t height, World& world);
     void initFramebuffer();
