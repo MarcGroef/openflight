@@ -28,10 +28,6 @@ void main()
             light += pow(dotReflection, 0.00001) * 0.01;
     }
     
-    //color = vec4(norm,1) * light;
-    color = vec4(0.2,0.3,0.2,1) * light;
-    //vec2 uv2 = vec2(1, 1);
-    //color = texture2D(text, uv);// * light;
-    color = texture2D(text, vec2(0.5,0.5)) * light;;
-    color = vec4(uv, 1, 1);
+
+    color = texture2D(text, vec2(uv.x, 1 - uv.y)) * light;
 }

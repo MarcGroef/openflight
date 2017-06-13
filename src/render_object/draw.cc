@@ -19,17 +19,20 @@ void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &li
     
     GLuint lightId = glGetUniformLocation(shaderProgramId, "lightPos");
     glUniform3f(lightId, lightpos.x, lightpos.y, lightpos.z);
-    glActiveTexture(GL_TEXTURE0);
-    GLuint textId = glGetUniformLocation(shaderProgramId, "text");
-    glUniform1i(textId, d_texture.id());
+    
+    
+    
     glBindVertexArray(d_vaoId);
-        glEnable(GL_TEXTURE_2D);
-
     if(d_hasTexture)
         d_texture.bind();
+    
+    GLuint textId = glGetUniformLocation(shaderProgramId, "text");
+    glUniform1i(textId, 0);
     
      //cout << d_vertIdc.size();
     glDrawArrays(GL_TRIANGLES,0,  (d_vertices.size() * 3)/ 8 );
     //glDrawElements(GL_TRIANGLES, d_vertIdc.size(), GL_UNSIGNED_SHORT, NULL);
+    
+   
     glBindVertexArray(0);
 }

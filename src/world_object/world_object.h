@@ -11,28 +11,31 @@ public:
     WorldObject();
     WorldObject(glm::vec3 const &position);
     WorldObject(glm::vec3 const &position, std::string const &obj, float scale, std::string const &textureFile);
+    void loadTexture();
 };
 
 inline WorldObject::WorldObject()
 :
     RenderObject()
 {
-    loadObject("objects/sphere.obj");
+    
 }
 
 inline WorldObject::WorldObject(glm::vec3 const &position, std::string const &obj, float scale, std::string const &textureFile)
 :
-    RenderObject(position, scale)
+    RenderObject(position, scale, textureFile)
 {
-    loadTexture(textureFile);
+    //loadTexture(textureFile);
     loadObject(obj);
 }
 
 inline WorldObject::WorldObject(glm::vec3 const &position)
 :
-    RenderObject(position, 1.0)
+    RenderObject(position, 1.0, "textures/moon.png")
 {
     loadObject("objects/sphere.obj");
 }
+
+
 
 #endif

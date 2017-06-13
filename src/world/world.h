@@ -28,7 +28,7 @@ inline void World::render(GLuint shaderId, glm::mat4 const &view)
 {
     for (WorldObject &obj : d_objects)
     {
-       // obj.applyForce({0, -28,0});
+        obj.applyForce({0, -10,0});
         obj.applyTorque({0,0,0.2});
         obj.update(0.01f);
         obj.draw(shaderId, view, d_lightpos);
@@ -39,7 +39,10 @@ inline void World::render(GLuint shaderId, glm::mat4 const &view)
 inline void World::load()
 {
     for (WorldObject &obj : d_objects)
+    {
         obj.load();
+        
+    }
 }
 
 inline void World::addObject(WorldObject &&object)

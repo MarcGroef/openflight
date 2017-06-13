@@ -99,7 +99,7 @@ inline void ObjParser::parseUV(std::string const &line)
     str >> a;
     float b;
     str >> b;
-    std::cout << '[' << a << ", " << b << "]\n";
+    //std::cout << '[' << a << ", " << b << "]\n";
     d_uv.push_back(a);
     d_uv.push_back(b);
     

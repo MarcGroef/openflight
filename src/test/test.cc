@@ -4,8 +4,8 @@
 #include "../shader_program/shader_program.h"
 #include "../physics_model/physics_model.h"
 #include "../world_object/world_object.h"
-#include "../world/world.h"
 #include "../obj_parser/obj_parser.h"
+#include "../world/world.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -25,8 +25,8 @@ int main(int argc, char** argv)
     
     world.addObject(WorldObject({-40,40,200}, "objects/cube.obj", 10, "textures/stone.png"));
     world.addObject(WorldObject({-40,-40,200}, "objects/sphere.obj", 0.2, "textures/moon.png"));
-    world.addObject(WorldObject({40,40,200}, "objects/sphere.obj", 0.2, "textures/moon.png"));
-    world.addObject(WorldObject({40,-40,200}, "objects/sphere.obj", 0.2, "textures/moon.png"));
+    world.addObject(WorldObject({40,40,200}, "objects/sphere.obj", 0.2, "textures/earth.png"));
+    world.addObject(WorldObject({40,-40,200}, "objects/sphere.obj", 0.3, "textures/earth.png"));
     
     ShaderProgram shaders("shaders/simple_fragment.glsl","shaders/phong_vertex.glsl");
     //ShaderProgram shaders("shaders/simple_fragment.glsl","shaders/simple_vertex.glsl");

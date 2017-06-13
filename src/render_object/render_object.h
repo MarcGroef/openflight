@@ -40,9 +40,8 @@ class RenderObject : public PhysicsModel
     
 public:
     RenderObject();
-    RenderObject(glm::vec3 const &position, float scale);
+    RenderObject(glm::vec3 const &position, float scale, std::string const &texturefile);
     ~RenderObject();
-    void loadTriangle();//debug
     void loadObject(ObjParser &&objParser);
     void loadObject(std::string const &objParser);
     void loadTexture(std::string const &texturFile);
@@ -61,12 +60,13 @@ inline RenderObject::RenderObject()
 {
 }
 
-inline RenderObject::RenderObject(glm::vec3 const &position, float scale)
+inline RenderObject::RenderObject(glm::vec3 const &position, float scale, std::string const &texturefile)
 :
     PhysicsModel(1.0,position, {0,0,0}, {1,1,1}),
+    d_texture(Texture(texturefile)),
     d_loaded(false),
     d_hasUV(false),
-    d_hasTexture(false),
+    d_hasTexture(true),
     d_scale(scale)
 {
 }

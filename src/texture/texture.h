@@ -24,8 +24,10 @@ private:
 
 inline void Texture::bind()
 {
+    glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, d_id);
+    
 }
 
 
@@ -44,12 +46,14 @@ inline void Texture::load()
         //glEnable(GL_TEXTURE_2D);
 
         glGenTextures(1, &d_id);
+        std::cout << "generated texture id " << d_id << '\n';
         glBindTexture(GL_TEXTURE_2D, d_id);
-        //glActiveTexture(GL_TEXTURE0);
+        //;
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, d_width, d_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &d_data[0]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+       
         std::cout << "loaded texture\n";
     }
 }
