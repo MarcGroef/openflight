@@ -9,6 +9,7 @@
 class Texture
 {
     GLuint d_id = 0;
+    bool d_loaded = false;
     std::vector<unsigned char> d_data;
     unsigned int d_width = 0;
     unsigned int d_height = 0;
@@ -40,7 +41,7 @@ inline GLuint Texture::id()
 inline void Texture::load()
 {
     std::cout << "Loading texture: data has " << d_data.size() << " floats\n";
-    if(d_data.size() != 0)
+    if(d_data.size() != 0 && !d_loaded)
     {
         std::cout << "loading..\n";
         //glEnable(GL_TEXTURE_2D);
@@ -55,6 +56,7 @@ inline void Texture::load()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
        
         std::cout << "loaded texture\n";
+        d_loaded = true;
     }
 }
 

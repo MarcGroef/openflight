@@ -1,6 +1,8 @@
 #include "texture.ih"
 
 Texture::Texture(string const &file)
+:
+    d_loaded(false)
 {
     if (file.size() != 0)
     {   
