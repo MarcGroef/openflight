@@ -58,7 +58,7 @@ void View::loop()
     glEnable(GL_CULL_FACE),
     glCullFace(GL_BACK);
    
-
+    setTextures();
     d_world.load();
     for(size_t idx = 0; d_loop; ++idx) {
         

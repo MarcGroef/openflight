@@ -2,7 +2,7 @@
 
 void RenderObject::load()
 {
-    d_texture.load();
+    d_texture->load();
     glGenVertexArrays(1, &d_vaoId);
  
     

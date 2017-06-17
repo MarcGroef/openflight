@@ -23,7 +23,8 @@ class RenderObject : public PhysicsModel
     std::vector<GLuint> d_normIdc;
     std::vector<GLfloat> d_normals;
     
-    Texture d_texture;
+    Texture* d_texture;
+    size_t d_textureIdx;
     
     GLuint d_vboId;
     
@@ -40,11 +41,12 @@ class RenderObject : public PhysicsModel
     
 public:
     RenderObject();
-    RenderObject(glm::vec3 const &position, float scale, std::string const &texturefile);
+    RenderObject(glm::vec3 const &position, float scale, size_t textureIdx);
     ~RenderObject();
     void loadObject(ObjParser &&objParser);
     void loadObject(std::string const &objParser);
-    void loadTexture(std::string const &texturFile);
+    void setTexture(Texture* texture);
+    size_t getTextureIdx() const;
     void load();
     void draw(GLuint shaderProgramId, glm::mat4 const &view, glm::vec3 const &lightpos);
 };
@@ -53,6 +55,7 @@ public:
 inline RenderObject::RenderObject()
 :
     PhysicsModel(1.0, {0.,0,100}, {0,0,0}, {1,1,1}),
+    d_textureIdx(0),
     d_loaded(false),
     d_hasUV(false),
     d_hasTexture(false),
@@ -60,23 +63,28 @@ inline RenderObject::RenderObject()
 {
 }
 
-inline RenderObject::RenderObject(glm::vec3 const &position, float scale, std::string const &texturefile)
+inline RenderObject::RenderObject(glm::vec3 const &position, float scale, size_t textureIdx)
 :
     PhysicsModel(1.0,position, {0,0,0}, {1,1,1}),
-    d_texture(Texture(texturefile)),
+    d_textureIdx(textureIdx),
     d_loaded(false),
     d_hasUV(false),
     d_hasTexture(true),
     d_scale(scale)
 {
+    
 }
 
-inline void RenderObject::loadTexture(std::string const &textureFile)
+inline void RenderObject::setTexture(Texture* texture)
 {
-    d_texture = Texture(textureFile);
-    d_texture.load();
-    d_hasTexture = true;
+    d_texture = texture;
 }
+
+inline size_t RenderObject::getTextureIdx() const
+{
+    return d_textureIdx;
+}
+
 
 inline void RenderObject::loadObject(std::string const &objfile)
 {

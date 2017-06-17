@@ -16,6 +16,8 @@
 #include <glm/glm.hpp>
 
 #include "../shader_program/shader_program.h"
+#include "../texture_manager/texture_manager.h"
+#include "../world_object/world_object.h"
 
 class View
 {
@@ -25,6 +27,8 @@ class View
     
     std::vector<ShaderProgram> d_shaders;
     ShaderProgram* d_activeShader;
+    
+    TextureManager d_textureManager;
     World d_world;
     
 
@@ -49,10 +53,25 @@ public:
     void linkShaders();
     void addShaders(ShaderProgram const &shader);
     void setActiveShaderProgram(size_t idx);
-    
+    void addTexture(std::string const &texureFile);
+    void setTextures(); //link texture ptrs to renderObjects in d_world
 private:
     void setProjection();
 };
+
+inline void View::setTextures()
+{
+    std::vector<WorldObject>& objects = d_world.getObjects();
+    for (WorldObject &wo : objects)
+    {
+        wo.setTexture(d_textureManager.getTexturePtr(wo.getTextureIdx()));
+    }
+}
+
+inline void View::addTexture(std::string const &textureFile)
+{
+    d_textureManager.addTexture(textureFile);
+}
 
 #include "view.implh"
 

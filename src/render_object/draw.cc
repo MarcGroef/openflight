@@ -24,7 +24,7 @@ void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &li
     
     glBindVertexArray(d_vaoId);
     if(d_hasTexture)
-        d_texture.bind();
+        d_texture->bind();
     
     GLuint textId = glGetUniformLocation(shaderProgramId, "text");
     glUniform1i(textId, 0);
