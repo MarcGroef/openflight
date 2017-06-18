@@ -26,4 +26,6 @@ void RenderObject::load()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    for( RenderObject& ro : d_childs)
+        ro.load();
 }

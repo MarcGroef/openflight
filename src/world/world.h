@@ -28,8 +28,8 @@ inline void World::render(GLuint shaderId, glm::mat4 const &view)
 {
     for (WorldObject &obj : d_objects)
     {
-        obj.applyForce({0, -10,0});
-        obj.applyTorque({0,0,0.2});
+        //obj.applyForce({0, -5,0});
+        obj.applyTorque({0,0,0.02});
         obj.update(0.01f);
         obj.draw(shaderId, view, d_lightpos);
     }

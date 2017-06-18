@@ -19,10 +19,17 @@ public:
     void applyForce(glm::vec3 const &force);
     void applyTorque(glm::vec3 const &force);
     void update(float deltaTime);
+    void setState(PhysicsModel const &other);
+    
     friend std::ostream &operator<<(std::ostream &ostr, PhysicsModel const &model);
+
 };
 
-
+inline void PhysicsModel::setState(PhysicsModel const &other)
+{
+    d_position = other.d_position;
+    d_rollPitchYaw = other.d_rollPitchYaw;
+}
 
 inline void PhysicsModel::applyForce(glm::vec3 const &force)
 {

@@ -40,9 +40,10 @@ inline GLuint Texture::id()
 
 inline void Texture::load()
 {
-    std::cout << "Loading texture: data has " << d_data.size() << " floats\n";
+    
     if(d_data.size() != 0 && !d_loaded)
     {
+        std::cout << "Loading texture: data has " << d_data.size() << " floats\n";
         std::cout << "loading..\n";
         //glEnable(GL_TEXTURE_2D);
 

@@ -44,6 +44,7 @@ class View
     GLuint d_frameBuffer;
     GLuint d_frameBufferTexture;
     GLuint d_frameBufferDepth;
+    float d_fov;
     
 public:
     View(size_t width, size_t height, World& world);
@@ -65,6 +66,8 @@ inline void View::setTextures()
     for (WorldObject &wo : objects)
     {
         wo.setTexture(d_textureManager.getTexturePtr(wo.getTextureIdx()));
+        for(RenderObject &ro : wo.getChilds())
+            ro.setTexture(d_textureManager.getTexturePtr(ro.getTextureIdx()));
     }
 }
 

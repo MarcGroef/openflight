@@ -49,11 +49,11 @@ void View::loop()
     
     initFramebuffer();
     
-    glViewport(0,0,d_winWidth, d_winHeight);
+    glViewport(0,0,windowRect.width, windowRect.height);
     
     //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-    //glEnable(GL_DEPTH_TEST);
-   // glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     
     glEnable(GL_CULL_FACE),
     glCullFace(GL_BACK);
@@ -69,11 +69,19 @@ void View::loop()
                     break;
                 case CC_EVENT_KEY_DOWN:
                     switch(ccWindowEventGet().keyCode) {
+                        case CC_KEY_PAGEUP:
+                            d_fov -= 1;
+                            break;
+                        case CC_KEY_PAGEDOWN:
+                            d_fov += 1;
+                            break;
                         case CC_KEY_M:
                             ccWindowSetMaximized();
+                            glViewport(0,0,windowRect.width, windowRect.height);
                             break;
                         case CC_KEY_W:
                             ccWindowSetWindowed(&windowRect);
+                            glViewport(0,0,windowRect.width, windowRect.height);
                             ccWindowSetCentered();
                             break;
                         case CC_KEY_UP:
@@ -97,7 +105,7 @@ void View::loop()
         }   
         
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         
         glUseProgram(d_activeShader->id());

@@ -35,4 +35,7 @@ void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &li
     
    
     glBindVertexArray(0);
+    
+    for( RenderObject& ro : d_childs)
+        ro.drawSlave(shaderProgramId);
 }

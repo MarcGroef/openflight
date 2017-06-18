@@ -5,7 +5,7 @@ void View::setProjection()
             
         vec3 camera = {0,0,0};
         
-        mat4 projection = perspective(radians(45.f), 1.33f, 0.1f, 1000.f);
+        mat4 projection = perspective(radians(d_fov), 1.33f, 0.1f, 1000.f);
         d_view = translate(mat4(1.0f), camera);
         
         
