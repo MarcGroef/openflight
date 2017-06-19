@@ -28,7 +28,7 @@ class ObjParser
     std::vector<GLuint> d_textIdc;
     std::vector<GLfloat> d_vertices;
     object d_activeObject;
-    
+    std::string d_objFolder;
 public:
     
     std::vector<GLfloat> d_interleaved;
@@ -63,6 +63,11 @@ inline ObjParser::ObjParser(std::string const &objfile)
     mtlfile[mtlfile.size() - 2] = 't';
     mtlfile[mtlfile.size() - 3] = 'm';
     
+    d_objFolder = objfile;
+    char c;
+    for(c = d_objFolder[d_objFolder.size() - 1]; c != '/'; c = d_objFolder[d_objFolder.size() - 1])
+        d_objFolder.resize(d_objFolder.size() - 1);
+    
     d_mtlParser.parseMTL(mtlfile);
     
     d_activeObject.d_name = "";
@@ -90,7 +95,11 @@ inline void ObjParser::setMaterial(std::string const &line)
     std::string s;
     str >> s;
     str >> s;
+    //std::cout << "searching material " << s << '\n';
     d_activeObject.d_material = d_mtlParser.get(s);
+    if (d_activeObject.d_material.d_map_Kd != "")
+        d_activeObject.d_material.d_map_Kd = d_objFolder + d_activeObject.d_material.d_map_Kd;
+    std::cout << d_activeObject.d_name << " gets texture " << d_activeObject.d_material.d_map_Kd << '\n';
 }
 
 inline void ObjParser::parseObject(std::string const &line)
@@ -106,12 +115,15 @@ inline void ObjParser::parseObject(std::string const &line)
         d_activeObject.d_interleaved = std::move(d_interleaved);
         //d_interleaved.clear();
         d_objects.push_back(d_activeObject);
-        
+        //std::cout << "pushed back " << d_activeObject.d_name << '\n';
+
     }
     std::stringstream str(line);
     std::string firstbit;
     str >> firstbit;
-    str >> d_activeObject.d_name;    
+    str >> d_activeObject.d_name;  
+    d_activeObject.d_material.d_map_Kd = "";
+    //std::cout << "parsed " << d_activeObject.d_name << "at line " << line << '\n';
 }
 
 inline void ObjParser::rollout()
@@ -135,6 +147,7 @@ inline void ObjParser::rollout()
     
     d_vertIdc.clear();
     d_normIdc.clear();
+    d_textIdc.clear();
     //d_vertices.clear();
     //d_normals.clear();
     //d_uv.clear();
@@ -344,7 +357,6 @@ inline void ObjParser::handleFType(std::string const &line)
 inline void ObjParser::parseLine(std::string const &line)
 {
     char c = line[0];
-    
     switch(c)
     {
         case 'v':
@@ -362,13 +374,14 @@ inline void ObjParser::parseLine(std::string const &line)
         case 's':
             break;
         case 'u':
+            setMaterial(line);
             break;
         case 'o':
             parseObject(line);
             break;
         case '#':
         default:
-            std::cout << line << '\n';
+            std::cout << "skipped " << line << '\n';
             break;
     }
 }

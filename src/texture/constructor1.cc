@@ -2,12 +2,13 @@
 
 Texture::Texture(string const &file)
 :
-    d_loaded(false)
+    d_loaded(false),
+    d_name(file)
 {
     if (file.size() != 0)
     {   
-        cout << "loading " + file + "\n";
+        //cout << "loading " + file + "\n";
         decode(d_data, d_width, d_height, file);
-        cout << "h: " << d_height << ", w: " << d_width << ", c:" << (d_data.size() / (d_height * d_width)) << '\n';
+        //cout << "h: " << d_height << ", w: " << d_width << ", c:" << (d_data.size() / (d_height * d_width)) << '\n';
     }
 }

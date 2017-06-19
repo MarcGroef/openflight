@@ -60,6 +60,8 @@ void View::loop()
    
     setTextures();
     d_world.load();
+    
+    glEnable( GL_MULTISAMPLE );
     for(size_t idx = 0; d_loop; ++idx) {
         
         while(ccWindowEventPoll()) {
@@ -117,6 +119,7 @@ void View::loop()
         d_world.render(d_activeShader->id(), d_view);
 
         ccGLBuffersSwap();
+        //break;
     }
     
     ccFree();

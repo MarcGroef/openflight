@@ -23,7 +23,6 @@ class RenderObject : public PhysicsModel
     std::vector<GLfloat> d_vertices;
     
     Texture* d_texture;
-    size_t d_textureIdx;
     std::string d_textureFile;
     
     GLuint d_vboId;
@@ -41,28 +40,31 @@ class RenderObject : public PhysicsModel
     
 public:
     RenderObject();
-    RenderObject(glm::vec3 const &position, float scale, size_t textureIdx);
+    RenderObject(glm::vec3 const &position, float scale, std::string const &textureFile);
     ~RenderObject();
     void loadObject(ObjParser &&objParser);
     void loadObject(std::string const &objParser);
     void loadObject(std::vector<GLfloat> const &data);
-    void setTextureIdx(size_t idx);
+
     void setTexture(Texture* texture);
-    size_t getTextureIdx() const;
     void load();
     std::vector<RenderObject> &getChilds();
     void draw(GLuint shaderProgramId, glm::mat4 const &view, glm::vec3 const &lightpos);
     void drawSlave(GLuint shaderProgramId);
     void setTextureFile(std::string const &file);
-    std::string const& getTextureFile();
+    std::string const& getTextureFile() const;
 };
 
 inline void RenderObject::setTextureFile(std::string const &file)
 {
-    d_textureFile = file;
+    if (file != "")
+    {
+        d_textureFile = file;
+        d_hasTexture = true;
+    }
 }
 
-inline std::string const& RenderObject::getTextureFile()
+inline std::string const& RenderObject::getTextureFile() const
 {
     return d_textureFile;
 }
@@ -76,6 +78,11 @@ inline void RenderObject::drawSlave(GLuint shaderProgramId)
     GLuint textId = glGetUniformLocation(shaderProgramId, "text");
     glUniform1i(textId, 0);
     
+    GLuint useText = glGetUniformLocation(shaderProgramId, "useTexture");
+    if(d_hasTexture)
+        glUniform1i(useText, 1);
+    else
+        glUniform1i(useText, 0);
      //cout << d_vertIdc.size();
     glDrawArrays(GL_TRIANGLES,0,  (d_vertices.size() * 3)/ 8 );
     glBindVertexArray(0);
@@ -86,7 +93,7 @@ inline void RenderObject::drawSlave(GLuint shaderProgramId)
 inline RenderObject::RenderObject()
 :
     PhysicsModel(1.0, {0.,0,100}, {0,0,0}, {1,1,1}),
-    d_textureIdx(0),
+    d_textureFile(""),
     d_loaded(false),
     d_hasUV(false),
     d_hasTexture(false),
@@ -94,35 +101,27 @@ inline RenderObject::RenderObject()
 {
 }
 
-inline RenderObject::RenderObject(glm::vec3 const &position, float scale, size_t textureIdx)
+inline RenderObject::RenderObject(glm::vec3 const &position, float scale, std::string const &textureIdx)
 :
     PhysicsModel(1.0,position, {0,0,0}, {1,1,1}),
-    d_textureIdx(textureIdx),
+    d_textureFile(textureIdx),
     d_loaded(false),
     d_hasUV(false),
     d_hasTexture(true),
     d_scale(scale)
 {
-    
+    if(textureIdx == "")
+        d_hasTexture = false;
 }
 
 inline std::vector<RenderObject> &RenderObject::getChilds()
 {
     return d_childs;
 }
-inline void RenderObject::setTextureIdx(size_t idx)
-{
-    d_textureIdx = idx;
-    d_hasTexture = true;
-}
+
 inline void RenderObject::setTexture(Texture* texture)
 {
     d_texture = texture;
-}
-
-inline size_t RenderObject::getTextureIdx() const
-{
-    return d_textureIdx;
 }
 
 
@@ -134,17 +133,20 @@ inline void RenderObject::loadObject(std::string const &objfile)
 
 inline void RenderObject::loadObject(ObjParser &&objParser)
 {
-
+    setTextureFile(objParser.d_objects[0].d_material.d_map_Kd);
+    std::cout << "set texture from object " << objParser.d_objects[0].d_name << ": " << objParser.d_objects[0].d_material.d_map_Kd << '\n';
     d_vertices = std::move(objParser.d_objects[0].d_interleaved);
     d_hasUV = true;//objParser.d_uv.size() != 0;//TODO remove d_hasUV
     d_loaded = true;
     size_t nObjects = objParser.d_objects.size();
+    
     for (size_t idx = 1; idx != nObjects; ++idx)
     {
         d_childs.push_back(RenderObject());
         d_childs[idx - 1].setTextureFile(objParser.d_objects[idx].d_material.d_map_Kd);
-        std::cout << objParser.d_objects[idx].d_material.d_map_Kd << '\n';
-        d_childs[idx - 1].setTextureIdx(0); //FIXME set correct texture
+        
+        //std::cout << objParser.d_objects[idx].d_material.d_map_Kd << '\n';
+        
         d_childs[idx - 1].loadObject(objParser.d_objects[idx].d_interleaved);
     }
 }

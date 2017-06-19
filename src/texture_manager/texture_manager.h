@@ -1,27 +1,39 @@
 #ifndef INCLUDED_TEXTURE_MANAGER_H_
 #define INCLUDED_TEXTURE_MANAGER_H_
 
-#include <vector>
+#include <map>
 #include <string>
 
 #include "../texture/texture.h"
 
 class TextureManager
 {
-   std::vector<Texture> d_textures;
+   std::map<std::string, Texture> d_textures;
 public:
    void addTexture(std::string const &textFile);
    Texture* getTexturePtr(size_t idx);
+   Texture* getTexturePtr(std::string const &textFile);
 };
 
-inline Texture* TextureManager::getTexturePtr(size_t idx)
+
+
+inline Texture* TextureManager::getTexturePtr(std::string const &textFile)
 {
-    return &d_textures[idx];
+    //std::cout << "trying to access texture " << textFile << '\n';
+    
+    return &d_textures.at(textFile);
 }
 
 inline void TextureManager::addTexture(std::string const &textFile)
 {
-    d_textures.push_back(Texture(textFile));
+    //std::cout << "asking for adding texture " << textFile << '\n';
+    if(d_textures.count(textFile) == 0)
+    {
+        //std::cout << "adding texture " << textFile << '\n';
+
+        d_textures.emplace(textFile, Texture(textFile));
+    } //else
+        //std::cout << "texture was already there\n";
 }
 
 #endif

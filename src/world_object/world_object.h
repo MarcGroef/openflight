@@ -10,7 +10,7 @@ class WorldObject : public RenderObject
 public:
     WorldObject();
     WorldObject(glm::vec3 const &position);
-    WorldObject(glm::vec3 const &position, std::string const &obj, float scale, size_t textureIdx);
+    WorldObject(glm::vec3 const &position, std::string const &obj, float scale, std::string const &textureIdx);
     void loadTexture();
 };
 
@@ -21,7 +21,7 @@ inline WorldObject::WorldObject()
     
 }
 
-inline WorldObject::WorldObject(glm::vec3 const &position, std::string const &obj, float scale, size_t textureIdx)
+inline WorldObject::WorldObject(glm::vec3 const &position, std::string const &obj, float scale, std::string const &textureIdx)
 :
     RenderObject(position, scale, textureIdx)
 {
@@ -31,7 +31,7 @@ inline WorldObject::WorldObject(glm::vec3 const &position, std::string const &ob
 
 inline WorldObject::WorldObject(glm::vec3 const &position)
 :
-    RenderObject(position, 1.0, 0)
+    RenderObject(position, 1.0, "")
 {
     loadObject("objects/sphere.obj");
 }

@@ -20,6 +20,11 @@ void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &li
     GLuint lightId = glGetUniformLocation(shaderProgramId, "lightPos");
     glUniform3f(lightId, lightpos.x, lightpos.y, lightpos.z);
     
+    GLuint useText = glGetUniformLocation(shaderProgramId, "useTexture");
+    if(d_hasTexture)
+        glUniform1i(useText, 1);
+    else
+        glUniform1i(useText, 0);
     
     
     glBindVertexArray(d_vaoId);
