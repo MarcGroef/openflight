@@ -14,7 +14,7 @@ public:
     std::vector<WorldObject>& getObjects();
     void addObject(WorldObject &&object);
     void load();
-    void render(GLuint shaderId, glm::mat4 const &view);
+    void render(GLuint shaderId, glm::mat4 const &view, glm::vec3 const &campos);
 };
 
 inline World::World()
@@ -24,14 +24,14 @@ inline World::World()
 }
 
 
-inline void World::render(GLuint shaderId, glm::mat4 const &view)
+inline void World::render(GLuint shaderId, glm::mat4 const &view, glm::vec3 const &campos)
 {
     for (WorldObject &obj : d_objects)
     {
         //obj.applyForce({0, -5,0});
-        obj.applyTorque({0,0,0.02});
+        //obj.applyTorque({0,0,0.02});
         obj.update(0.01f);
-        obj.draw(shaderId, view, d_lightpos);
+        obj.draw(shaderId, view, d_lightpos, campos);
     }
 }
 

@@ -18,6 +18,18 @@
 
 class RenderObject : public PhysicsModel
 {
+    struct material
+    {
+        glm::vec3 d_Ka;
+        glm::vec3 d_Kd;
+        glm::vec3 d_Ks;
+        glm::vec3 d_Ke;
+        float d_Ni;
+        float d_d;
+        int d_illum;
+    };
+    
+    material d_material;
     std::vector<RenderObject> d_childs;
     
     std::vector<GLfloat> d_vertices;
@@ -49,11 +61,38 @@ public:
     void setTexture(Texture* texture);
     void load();
     std::vector<RenderObject> &getChilds();
-    void draw(GLuint shaderProgramId, glm::mat4 const &view, glm::vec3 const &lightpos);
+    void draw(GLuint shaderProgramId, glm::mat4 const &view, glm::vec3 const &lightpos, glm::vec3 const &campos);
     void drawSlave(GLuint shaderProgramId);
     void setTextureFile(std::string const &file);
     std::string const& getTextureFile() const;
+    
+private:
+    void bindMaterial(GLuint pid);
 };
+
+inline void RenderObject::bindMaterial(GLuint shaderProgramId)
+{
+    GLuint matId = glGetUniformLocation(shaderProgramId, "Ka");
+    glUniform3f(matId, d_material.d_Ka.x, d_material.d_Ka.y, d_material.d_Ka.z);
+    
+    matId = glGetUniformLocation(shaderProgramId, "Kd");
+    glUniform3f(matId, d_material.d_Kd.x, d_material.d_Kd.y, d_material.d_Kd.z);
+    
+    matId = glGetUniformLocation(shaderProgramId, "Ks");
+    glUniform3f(matId, d_material.d_Ks.x, d_material.d_Ks.y, d_material.d_Ks.z);
+    
+    matId = glGetUniformLocation(shaderProgramId, "Ke");
+    glUniform3f(matId, d_material.d_Ke.x, d_material.d_Ke.y, d_material.d_Ke.z);
+    
+    matId = glGetUniformLocation(shaderProgramId, "Ni");
+    glUniform1f(matId, d_material.d_Ni);
+    
+    matId = glGetUniformLocation(shaderProgramId, "d");
+    glUniform1f(matId, d_material.d_d);
+    
+    matId = glGetUniformLocation(shaderProgramId, "illum");
+    glUniform1i(matId, d_material.d_illum);
+}
 
 inline void RenderObject::setTextureFile(std::string const &file)
 {
@@ -69,24 +108,7 @@ inline std::string const& RenderObject::getTextureFile() const
     return d_textureFile;
 }
 
-inline void RenderObject::drawSlave(GLuint shaderProgramId)
-{
-    glBindVertexArray(d_vaoId);
-    if(d_hasTexture)
-        d_texture->bind();
-    
-    GLuint textId = glGetUniformLocation(shaderProgramId, "text");
-    glUniform1i(textId, 0);
-    
-    GLuint useText = glGetUniformLocation(shaderProgramId, "useTexture");
-    if(d_hasTexture)
-        glUniform1i(useText, 1);
-    else
-        glUniform1i(useText, 0);
-     //cout << d_vertIdc.size();
-    glDrawArrays(GL_TRIANGLES,0,  (d_vertices.size() * 3)/ 8 );
-    glBindVertexArray(0);
-}
+
 
 
 
@@ -131,25 +153,7 @@ inline void RenderObject::loadObject(std::string const &objfile)
     
 }
 
-inline void RenderObject::loadObject(ObjParser &&objParser)
-{
-    setTextureFile(objParser.d_objects[0].d_material.d_map_Kd);
-    std::cout << "set texture from object " << objParser.d_objects[0].d_name << ": " << objParser.d_objects[0].d_material.d_map_Kd << '\n';
-    d_vertices = std::move(objParser.d_objects[0].d_interleaved);
-    d_hasUV = true;//objParser.d_uv.size() != 0;//TODO remove d_hasUV
-    d_loaded = true;
-    size_t nObjects = objParser.d_objects.size();
-    
-    for (size_t idx = 1; idx != nObjects; ++idx)
-    {
-        d_childs.push_back(RenderObject());
-        d_childs[idx - 1].setTextureFile(objParser.d_objects[idx].d_material.d_map_Kd);
-        
-        //std::cout << objParser.d_objects[idx].d_material.d_map_Kd << '\n';
-        
-        d_childs[idx - 1].loadObject(objParser.d_objects[idx].d_interleaved);
-    }
-}
+
 
 inline void RenderObject::loadObject(std::vector<GLfloat> const &data)
 {
@@ -163,7 +167,7 @@ inline RenderObject::~RenderObject()
 {
     if(d_loaded)
     {
-        //glDeleteVertexArrays(1, &d_vaoId);
+        //glDeleteVertexArrays(1, &d_vaoId); //TODO frees, check cpy & moves
         //glDeleteBuffers(1, &d_vboId);
         //glDeleteBuffers(1, &d_eboId);
     }

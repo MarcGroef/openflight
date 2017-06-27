@@ -51,17 +51,24 @@ void View::loop()
     
     glViewport(0,0,windowRect.width, windowRect.height);
     
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     
-    glEnable(GL_CULL_FACE),
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE),
+    //glCullFace(GL_BACK);
+    
+    
+    glEnable(GL_BLEND);
+    glBlendEquation( GL_FUNC_ADD );
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
    
     setTextures();
     d_world.load();
     
     glEnable( GL_MULTISAMPLE );
+    
+    d_eye.y = -10;
     for(size_t idx = 0; d_loop; ++idx) {
         
         while(ccWindowEventPoll()) {
@@ -79,12 +86,33 @@ void View::loop()
                             break;
                         case CC_KEY_M:
                             ccWindowSetMaximized();
-                            glViewport(0,0,windowRect.width, windowRect.height);
+                            //glViewport(0,0,windowRect.width, windowRect.height);
+                            //ccWindowSetFullscreen(CC_FULLSCREEN_CURRENT_DISPLAY);
+                            break;
+                        case CC_KEY_Q:
+                            d_loop = false;
                             break;
                         case CC_KEY_W:
-                            ccWindowSetWindowed(&windowRect);
-                            glViewport(0,0,windowRect.width, windowRect.height);
-                            ccWindowSetCentered();
+                            d_eye.x -= .5 * sin(radians(d_xRotation));
+                            d_eye.z += .5 * cos(radians(d_xRotation));
+                            break;
+                        case CC_KEY_S:
+                            d_eye.x += .5 * sin(radians(d_xRotation));
+                            d_eye.z -= .5 * cos(radians(d_xRotation));
+                            break;
+                        case CC_KEY_A:
+                            d_eye.x += .5 * sin(radians(d_xRotation + 90));
+                            d_eye.z -= .5 * cos(radians(d_xRotation + 90));
+                            break;
+                        case CC_KEY_D:
+                            d_eye.x += .5 * sin(radians(d_xRotation - 90));
+                            d_eye.z -= .5 * cos(radians(d_xRotation - 90));
+                            break;
+                        case CC_KEY_LCONTROL:
+                            d_eye.y += 0.5;
+                            break;
+                        case CC_KEY_LSHIFT:
+                            d_eye.y -= 0.5;
                             break;
                         case CC_KEY_UP:
                             d_yRotation -= 1;
@@ -116,7 +144,7 @@ void View::loop()
 
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         
-        d_world.render(d_activeShader->id(), d_view);
+        d_world.render(d_activeShader->id(), d_view, vec3(d_eye.x , d_eye.y , d_eye.z));
 
         ccGLBuffersSwap();
         //break;

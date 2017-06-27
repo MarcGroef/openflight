@@ -1,8 +1,11 @@
 #include "render_object.ih"
 
-void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &lightpos)
+void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &lightpos, vec3 const &campos)
 {
-    mat4 model = translate(mat4(1.0f), d_position);
+    
+
+    
+    mat4 model = translate(mat4(1.0f), d_position + campos);
     model = scale(model, vec3({d_scale, d_scale, d_scale}));
     model = rotate(model, d_rollPitchYaw.x, vec3(0,0,1));
     model = rotate(model, d_rollPitchYaw.y, vec3(1,0,0));
@@ -19,6 +22,8 @@ void RenderObject::draw(GLuint shaderProgramId, mat4 const &view, vec3 const &li
     
     GLuint lightId = glGetUniformLocation(shaderProgramId, "lightPos");
     glUniform3f(lightId, lightpos.x, lightpos.y, lightpos.z);
+
+    bindMaterial(shaderProgramId);
     
     GLuint useText = glGetUniformLocation(shaderProgramId, "useTexture");
     if(d_hasTexture)

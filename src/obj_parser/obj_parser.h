@@ -99,7 +99,7 @@ inline void ObjParser::setMaterial(std::string const &line)
     d_activeObject.d_material = d_mtlParser.get(s);
     if (d_activeObject.d_material.d_map_Kd != "")
         d_activeObject.d_material.d_map_Kd = d_objFolder + d_activeObject.d_material.d_map_Kd;
-    std::cout << d_activeObject.d_name << " gets texture " << d_activeObject.d_material.d_map_Kd << '\n';
+    //std::cout << d_activeObject.d_name << " gets texture " << d_activeObject.d_material.d_map_Kd << '\n';
 }
 
 inline void ObjParser::parseObject(std::string const &line)

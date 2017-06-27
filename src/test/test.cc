@@ -24,15 +24,17 @@ int main(int argc, char** argv)
     World world;
     
     
-    world.addObject(WorldObject({-40,-40,200}, "objects/ASK21-MI/ask21mi.obj", 5, ""));
-    world.addObject(WorldObject({40,-40,200}, "objects/C-2A/c-2a.obj", 5, ""));
+    world.addObject(WorldObject({-60,2,0}, "objects/ASK21-MI/ask21mi.obj", 5, ""));
+    world.addObject(WorldObject({32.5,8.5,2.5}, "objects/C-2A/c-2a.obj", 5, ""));
+    world.addObject(WorldObject({-0,-3,-0}, "objects/ground/ground.obj", 1000, ""));
+    world.addObject(WorldObject({-0,-3,-0}, "objects/sky/sky.obj", 900, ""));
 
     //world.addObject(WorldObject({-40,-40,200}, "objects/sphere.obj", 0.1, 1));
 
     
     ShaderProgram shaders("shaders/simple_fragment.glsl","shaders/phong_vertex.glsl");
    // ShaderProgram shaders2("shaders/simple_fragment_notexture.glsl","shaders/phong_vertex.glsl");
-    View view(1024,768, world);
+    View view(1920,1080, world);
     //view.addTexture("objects/ASK21-MI/textures/texture.png");
     //view.addTexture("objects/C-2A/textures/texture.png");
     //view.addTexture("textures/moon.png");

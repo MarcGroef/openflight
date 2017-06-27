@@ -2,9 +2,10 @@
 
 void RenderObject::load()
 {
-    if (d_hasTexture)
+    //if (d_hasTexture)
     {
-        d_texture->load();
+        if (d_hasTexture)
+            d_texture->load();
         glGenVertexArrays(1, &d_vaoId);
     
         
