@@ -1,6 +1,6 @@
 #include "obj_parser.ih"
 
-inline void ObjParser::parseLine(std::string const &line)
+void ObjParser::parseLine(std::string const &line)
 {
     char c = line[0];
     switch(c)

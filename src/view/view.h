@@ -67,6 +67,21 @@ inline void View::addTexture(std::string const &textureFile)
     d_textureManager.addTexture(textureFile);
 }
 
-#include "view.implh"
+inline void View::setActiveShaderProgram(size_t idx)
+{
+    d_activeShader = &d_shaders[idx];
+}
+
+inline void View::linkShaders()
+{
+    for (ShaderProgram &sp : d_shaders)
+        sp.link();
+}
+inline void View::addShaders(ShaderProgram const &shaders)
+{
+    d_shaders.push_back(shaders);
+}
+
+
 
 #endif
